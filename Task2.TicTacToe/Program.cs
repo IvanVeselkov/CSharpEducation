@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Collections.Generic;
 namespace Task2.TicTacToe
 {
     class Program
@@ -162,7 +162,10 @@ namespace Task2.TicTacToe
                 }
             }
 
+
             //диагональ положительная
+            checkLineX = true;
+            checkLineO = true;
             for (int j = 0; j < 3; j++)
             {
                 if (field[j, j] == 'x')
@@ -192,7 +195,11 @@ namespace Task2.TicTacToe
                 return false;
             }
 
+
+
             //диагональ отрицательная
+            checkLineX = true;
+            checkLineO = true;
             for (int j = 0; j < 3; j++)
             {
                 if (field[2-j, 2 - j] == 'x')
@@ -238,14 +245,49 @@ namespace Task2.TicTacToe
             return false;
         }
 
+        /// <summary>
+        /// Метод содержащий алгоритм действий бота
+        /// </summary>
+        /// <param name="botSymbol"></param>
+        private static void BotStep(char botSymbol)
+        {
+            Console.WriteLine("Бот делает ход ...");
+            //проверим возможные ходы
+            List<(int, int)> emptyCells = new List<(int, int)>();
+
+            //поиск 
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (field[i, j] == ' ')
+                    {
+                        emptyCells.Add((i, j));
+                    }
+                }
+            }
+
+            //выбор точки куда поставит символ бот
+            Random r = new Random();
+            int numberCell = r.Next(0, emptyCells.Count - 1);
+
+            (int, int) cell = emptyCells[numberCell];
+            field[cell.Item1, cell.Item2] = botSymbol;
+        }
         private static void Win(char playerSymbol)
         {
             Console.WriteLine(string.Format("Победа {0}", playerSymbol));
         }
         static void Main(string[] args)
         {
+            Console.WriteLine("TicTacToe");
+            Console.WriteLine("Выберите режим игры: \n \t 0 - игра с игроком \n \t 1 - игра против компьютера");
+            int gameMode=0;
+            do
+            {
+                gameMode = int.Parse(Console.ReadLine());
+            } while (gameMode < 0 || gameMode > 1);
             ShowField(field);
-
             int playerId = 0; //0 - первый игрок. 1 - второй игрок
             do
             {
@@ -256,7 +298,10 @@ namespace Task2.TicTacToe
                         playerId = 1;
                         break;
                     case 1:
-                        PlayerStep("Второй игрок (o)", 'o');
+                        if (gameMode == 0)
+                            PlayerStep("Второй игрок (o)", 'o');
+                        else
+                            BotStep('o');
                         playerId = 0;
                         break;
                 }
