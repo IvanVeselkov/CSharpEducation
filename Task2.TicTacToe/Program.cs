@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+
 namespace Task2.TicTacToe
 {
     class Program
     {
         static char[,] field = new char[3, 3] { { ' ', ' ', ' ' }, { ' ', ' ', ' ' }, { ' ', ' ', ' ' } };
+
         /// <summary>
-        /// Вывод поля в коонсоль
+        /// Вывод поля в консоль.
         /// </summary>
         /// <param name="elements"></param>
         private static void ShowField(char[,] elements)
@@ -18,7 +20,7 @@ namespace Task2.TicTacToe
         }
 
         /// <summary>
-        /// Ход игрока
+        /// Алгоритм хода игрока.
         /// </summary>
         /// <param name="PlayerName"></param>
         /// <param name="playerSymbol"></param>
@@ -58,7 +60,7 @@ namespace Task2.TicTacToe
         }
 
         /// <summary>
-        /// Проверка шага игры
+        /// Проверка шага игры.
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -78,8 +80,8 @@ namespace Task2.TicTacToe
         }
 
         /// <summary>
-        /// Метод проверки конца игры
-        /// Если истина то поле для хода есть
+        /// Метод проверки конца игры.
+        /// Если истина то поле для хода есть.
         /// Если ложь то поля для хода нет.
         /// 
         /// Проверка для победы
@@ -91,8 +93,7 @@ namespace Task2.TicTacToe
         {
             bool checkLineX = true;
             bool checkLineO = true;
-            //проверка строк
-            //горизонтальные
+
             for (int i=0;i<3;i++)
             {
                 checkLineX = true;
@@ -127,7 +128,6 @@ namespace Task2.TicTacToe
                 }
             }
             
-            //вертикальные
             for (int i = 0; i < 3; i++)
             {
                 checkLineX = true;
@@ -162,8 +162,6 @@ namespace Task2.TicTacToe
                 }
             }
 
-
-            //диагональ положительная
             checkLineX = true;
             checkLineO = true;
             for (int j = 0; j < 3; j++)
@@ -195,9 +193,6 @@ namespace Task2.TicTacToe
                 return false;
             }
 
-
-
-            //диагональ отрицательная
             checkLineX = true;
             checkLineO = true;
             for (int j = 0; j < 3; j++)
@@ -229,8 +224,6 @@ namespace Task2.TicTacToe
                 return false;
             }
 
-
-            //проверка есть ли поле
             for (int i =0;i<3;i++)
             {
                 for(int j=0;j<3;j++)
@@ -246,16 +239,15 @@ namespace Task2.TicTacToe
         }
 
         /// <summary>
-        /// Метод содержащий алгоритм действий бота
+        /// Метод содержащий алгоритм действий бота.
         /// </summary>
         /// <param name="botSymbol"></param>
         private static void BotStep(char botSymbol)
         {
             Console.WriteLine("Бот делает ход ...");
-            //проверим возможные ходы
+            
             List<(int, int)> emptyCells = new List<(int, int)>();
 
-            //поиск 
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
@@ -267,17 +259,21 @@ namespace Task2.TicTacToe
                 }
             }
 
-            //выбор точки куда поставит символ бот
             Random r = new Random();
             int numberCell = r.Next(0, emptyCells.Count - 1);
-
             (int, int) cell = emptyCells[numberCell];
             field[cell.Item1, cell.Item2] = botSymbol;
         }
+
+        /// <summary>
+        /// Метод описывает список действий при победе
+        /// </summary>
+        /// <param name="playerSymbol"></param>
         private static void Win(char playerSymbol)
         {
             Console.WriteLine(string.Format("Победа {0}", playerSymbol));
         }
+
         static void Main(string[] args)
         {
             Console.WriteLine("TicTacToe");
@@ -288,7 +284,7 @@ namespace Task2.TicTacToe
                 gameMode = int.Parse(Console.ReadLine());
             } while (gameMode < 0 || gameMode > 1);
             ShowField(field);
-            int playerId = 0; //0 - первый игрок. 1 - второй игрок
+            int playerId = 0;
             do
             {
                 switch(playerId)
