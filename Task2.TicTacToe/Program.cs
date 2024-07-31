@@ -7,10 +7,15 @@ namespace Task2.TicTacToe
     {
         static char[,] field = new char[3, 3] { { ' ', ' ', ' ' }, { ' ', ' ', ' ' }, { ' ', ' ', ' ' } };
 
+        static List<char[]> lines = new List<char[]>();
+
+        const char XPlayerSymbol = 'x';
+        const char OPlayerSymbol = 'o';
+
         /// <summary>
-        /// Вывод поля в консоль.
+        /// Вывод игрового поля в консоль.
         /// </summary>
-        /// <param name="elements"></param>
+        /// <param name="elements">Двумерный массив поля игры</param>
         private static void ShowField(char[,] elements)
         {
             Console.WriteLine(string.Format("  {0} {1} {2} y", 0, 1, 2));
@@ -22,8 +27,8 @@ namespace Task2.TicTacToe
         /// <summary>
         /// Алгоритм хода игрока.
         /// </summary>
-        /// <param name="PlayerName"></param>
-        /// <param name="playerSymbol"></param>
+        /// <param name="PlayerName">Имя пользователя</param>
+        /// <param name="playerSymbol">Символ игрока X или O</param>
         private static void PlayerStep(string PlayerName,char playerSymbol)
         {
             Console.WriteLine(string.Format("Ход игрока {0}", PlayerName));
@@ -60,11 +65,11 @@ namespace Task2.TicTacToe
         }
 
         /// <summary>
-        /// Проверка шага игры.
+        /// Проверка ячейки поля на возможность поставить туда символ
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="playerSymbol"></param>
+        /// <param name="x">Координата обозначающая строку игрового поля</param>
+        /// <param name="y">Координата обозначающая столбец игрового поля</param>
+        /// <param name="playerSymbol">Символ игрока X или O</param>
         /// <returns></returns>
         private static bool CheckStep(int x,int y,char playerSymbol)
         {
@@ -80,172 +85,81 @@ namespace Task2.TicTacToe
         }
 
         /// <summary>
-        /// Метод проверки конца игры.
-        /// Если истина то поле для хода есть.
-        /// Если ложь то поля для хода нет.
-        /// 
-        /// Проверка для победы
-        /// 
-        /// Проверка для ничьи
+        /// Метод описывает список действий при победе
         /// </summary>
-        /// <returns></returns>
-        private static bool CheckField()
+        /// <param name="playerSymbol">Метод содержащий алгоритм действий игрока.</param>
+        private static void Win(char playerSymbol)
         {
-            bool checkLineX = true;
-            bool checkLineO = true;
+            Console.WriteLine(string.Format("Победа {0}", playerSymbol));
+        }
 
-            for (int i=0;i<3;i++)
+        /// <summary>
+        /// Метод обновления данных для проверки победы
+        /// </summary>
+        private static void UpdateLines()
+        {
+            lines.Add(new char[3] { field[0, 0], field[0, 1], field[0, 2] });
+            lines.Add(new char[3] { field[1, 0], field[1, 1], field[1, 2] });
+            lines.Add(new char[3] { field[2, 0], field[2, 1], field[2, 2] });
+            lines.Add(new char[3] { field[0, 0], field[1, 0], field[2, 0] });
+            lines.Add(new char[3] { field[0, 1], field[1, 1], field[2, 1] });
+            lines.Add(new char[3] { field[0, 2], field[1, 2], field[2, 2] });
+            lines.Add(new char[3] { field[0, 0], field[1, 1], field[2, 2] });
+            lines.Add(new char[3] { field[2, 0], field[1, 1], field[0, 2] });
+        }
+
+        /// <summary>
+        /// Метод проверки условий конца игры
+        /// </summary>
+        /// <returns>Возращает истини если игра продолжается и ложь если игра закочилась</returns>
+        private static bool СheckingTheLines()
+        {
+            bool TheResultOfTheCheck = true;
+            for (int i =0;i<lines.Count;i++)
             {
-                checkLineX = true;
-                checkLineO = true;
-                for(int j = 0;j<3;j++)
+                bool flagForXPlayer = true;
+                bool flagForOPlayer = true;
+                for (int j=0;j<3;j++)
                 {
-                    if (field[i,j]=='x')
+                    if(lines[i][j] == XPlayerSymbol)
                     {
-                        checkLineO = false;
+                        flagForOPlayer = false;
                     }
-                    if (field[i, j] == 'o')
+                    if (lines[i][j] == OPlayerSymbol)
                     {
-                        checkLineX = false;
+                        flagForXPlayer = false;
                     }
-                    if (field[i, j] == ' ')
+                    if (lines[i][j] == ' ')
                     {
-                        checkLineO = false;
-                        checkLineX = false;
-                    }
-                }
-                if(checkLineO)
-                {
-                    //победа О
-                    Win('o');
-                    return false;
-                }
-                if(checkLineX)
-                {
-                    //победа X
-                    Win('x');
-                    return false;
-                }
-            }
-            
-            for (int i = 0; i < 3; i++)
-            {
-                checkLineX = true;
-                checkLineO = true;
-                for (int j = 0; j < 3; j++)
-                {
-                    if (field[j, i] == 'x')
-                    {
-                        checkLineO = false;
-                    }
-                    if (field[j, i] == 'o')
-                    {
-                        checkLineX = false;
-                    }
-                    if (field[j, i] == ' ')
-                    {
-                        checkLineO = false;
-                        checkLineX = false;
+                        flagForOPlayer = false;
+                        flagForXPlayer = false;
+                        break;
                     }
                 }
-                if (checkLineO)
+                if (flagForOPlayer)
                 {
-                    //победа О
-                    Win('o');
-                    return false;
+                    Win(OPlayerSymbol);
+                    TheResultOfTheCheck= false;
                 }
-                if (checkLineX)
+                if (flagForXPlayer)
                 {
-                    //победа X
-                    Win('x');
-                    return false;
+                    Win(XPlayerSymbol);
+                    TheResultOfTheCheck = false;
                 }
             }
 
-            checkLineX = true;
-            checkLineO = true;
-            for (int j = 0; j < 3; j++)
-            {
-                if (field[j, j] == 'x')
-                {
-                    checkLineO = false;
-                }
-                if (field[j, j] == 'o')
-                {
-                    checkLineX = false;
-                }
-                if (field[j, j] == ' ')
-                {
-                    checkLineO = false;
-                    checkLineX = false;
-                }
-            }
-            if (checkLineO)
-            {
-                //победа О
-                Win('o');
-                return false;
-            }
-            if (checkLineX)
-            {
-                //победа X
-                Win('x');
-                return false;
-            }
-
-            checkLineX = true;
-            checkLineO = true;
-            for (int j = 0; j < 3; j++)
-            {
-                if (field[2-j, 2 - j] == 'x')
-                {
-                    checkLineO = false;
-                }
-                if (field[2 - j, 2 - j] == 'o')
-                {
-                    checkLineX = false;
-                }
-                if (field[2 - j, 2 - j] == ' ')
-                {
-                    checkLineO = false;
-                    checkLineX = false;
-                }
-            }
-            if (checkLineO)
-            {
-                //победа О
-                Win('o');
-                return false;
-            }
-            if (checkLineX)
-            {
-                //победа X
-                Win('x');
-                return false;
-            }
-
-            for (int i =0;i<3;i++)
-            {
-                for(int j=0;j<3;j++)
-                {
-                    if(field[i,j]==' ')
-                    {
-                        return true;
-                    }
-                }
-            }
-            Console.WriteLine("Ничья");
-            return false;
+            return TheResultOfTheCheck; 
         }
 
         /// <summary>
         /// Метод содержащий алгоритм действий бота.
+        /// Текущий метод использует случайную установки символа на поле
         /// </summary>
-        /// <param name="botSymbol"></param>
-        private static void BotStep(char botSymbol)
+        /// <param name="botSymbol">Символ отрисовки хода бота</param>
+        private static void BotRandomStep(char botSymbol)
         {
             Console.WriteLine("Бот делает ход ...");
-            
+
             List<(int, int)> emptyCells = new List<(int, int)>();
 
             for (int i = 0; i < 3; i++)
@@ -265,17 +179,10 @@ namespace Task2.TicTacToe
             field[cell.Item1, cell.Item2] = botSymbol;
         }
 
-        /// <summary>
-        /// Метод описывает список действий при победе
-        /// </summary>
-        /// <param name="playerSymbol"></param>
-        private static void Win(char playerSymbol)
-        {
-            Console.WriteLine(string.Format("Победа {0}", playerSymbol));
-        }
-
         static void Main(string[] args)
         {
+
+            UpdateLines();
             Console.WriteLine("TicTacToe");
             Console.WriteLine("Выберите режим игры: \n \t 0 - игра с игроком \n \t 1 - игра против компьютера");
             int gameMode=0;
@@ -283,6 +190,7 @@ namespace Task2.TicTacToe
             {
                 gameMode = int.Parse(Console.ReadLine());
             } while (gameMode < 0 || gameMode > 1);
+
             ShowField(field);
             int playerId = 0;
             do
@@ -290,20 +198,23 @@ namespace Task2.TicTacToe
                 switch(playerId)
                 {
                     case 0:
-                        PlayerStep("Первый игрок (x)", 'x');
+                        PlayerStep("Первый игрок (x)", XPlayerSymbol);
                         playerId = 1;
                         break;
                     case 1:
                         if (gameMode == 0)
-                            PlayerStep("Второй игрок (o)", 'o');
+                            PlayerStep("Второй игрок (o)", OPlayerSymbol);
                         else
-                            BotStep('o');
+                            BotRandomStep(OPlayerSymbol);
                         playerId = 0;
                         break;
                 }
                 ShowField(field);
+                //Обновление значений в линиях
+                lines.Clear();
+                UpdateLines();
 
-            } while (CheckField());
+            } while (СheckingTheLines());
         }
     }
 }
