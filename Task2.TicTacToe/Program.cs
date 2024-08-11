@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace Task2.TicTacToe
 {
-    class Program
+    internal class Program
     {
-        static char[,] field = new char[3, 3] { { ' ', ' ', ' ' }, { ' ', ' ', ' ' }, { ' ', ' ', ' ' } };
+        private static char[,] field = new char[3, 3] { { ' ', ' ', ' ' }, { ' ', ' ', ' ' }, { ' ', ' ', ' ' } };
 
-        static List<char[]> lines = new List<char[]>();
+        private static List<char[]> lines = new List<char[]>();
 
-        const char XPlayerSymbol = 'x';
-        const char OPlayerSymbol = 'o';
+        private const char XPlayerSymbol = 'x';
+        private const char OPlayerSymbol = 'o';
 
         /// <summary>
         /// Вывод игрового поля в консоль.
@@ -20,7 +20,7 @@ namespace Task2.TicTacToe
         {
             Console.WriteLine(string.Format("  {0} {1} {2} y", 0, 1, 2));
             for (int i = 0; i < 3; i++)
-                Console.WriteLine(string.Format("{3}|{0}|{1}|{2}|", elements[i, 0], elements[i, 1], elements[i,  2],i));
+                Console.WriteLine(string.Format("{3}|{0}|{1}|{2}|", elements[i, 0], elements[i, 1], elements[i, 2], i));
             Console.WriteLine("x");
         }
 
@@ -29,10 +29,10 @@ namespace Task2.TicTacToe
         /// </summary>
         /// <param name="PlayerName">Имя пользователя</param>
         /// <param name="playerSymbol">Символ игрока X или O</param>
-        private static void PlayerStep(string PlayerName,char playerSymbol)
+        private static void PlayerStep(string PlayerName, char playerSymbol)
         {
             Console.WriteLine(string.Format("Ход игрока {0}", PlayerName));
-            Console.WriteLine("Введи номер ячейки (x;y). Левая верхняя ячейка с координатами (0;0).");;
+            Console.WriteLine("Введи номер ячейки (x;y). Левая верхняя ячейка с координатами (0;0)."); ;
             int x, y;
             bool canExit = false;
             do
@@ -56,8 +56,8 @@ namespace Task2.TicTacToe
                     }
                 } while (true);
 
-                canExit = CheckStep(x, y,playerSymbol);
-                if(!canExit)
+                canExit = CheckStep(x, y, playerSymbol);
+                if (!canExit)
                 {
                     Console.WriteLine("Данная ячейка занята, выбери другую");
                 }
@@ -71,9 +71,9 @@ namespace Task2.TicTacToe
         /// <param name="y">Координата обозначающая столбец игрового поля</param>
         /// <param name="playerSymbol">Символ игрока X или O</param>
         /// <returns></returns>
-        private static bool CheckStep(int x,int y,char playerSymbol)
+        private static bool CheckStep(int x, int y, char playerSymbol)
         {
-            if(field[x,y]==' ')
+            if (field[x, y] == ' ')
             {
                 field[x, y] = playerSymbol;
                 return true;
@@ -115,13 +115,13 @@ namespace Task2.TicTacToe
         private static bool СheckingTheLines()
         {
             bool TheResultOfTheCheck = true;
-            for (int i =0;i<lines.Count;i++)
+            for (int i = 0; i < lines.Count; i++)
             {
                 bool flagForXPlayer = true;
                 bool flagForOPlayer = true;
-                for (int j=0;j<3;j++)
+                for (int j = 0; j < 3; j++)
                 {
-                    if(lines[i][j] == XPlayerSymbol)
+                    if (lines[i][j] == XPlayerSymbol)
                     {
                         flagForOPlayer = false;
                     }
@@ -139,7 +139,7 @@ namespace Task2.TicTacToe
                 if (flagForOPlayer)
                 {
                     Win(OPlayerSymbol);
-                    TheResultOfTheCheck= false;
+                    TheResultOfTheCheck = false;
                 }
                 if (flagForXPlayer)
                 {
@@ -148,7 +148,7 @@ namespace Task2.TicTacToe
                 }
             }
 
-            return TheResultOfTheCheck; 
+            return TheResultOfTheCheck;
         }
 
         /// <summary>
@@ -179,13 +179,12 @@ namespace Task2.TicTacToe
             field[cell.Item1, cell.Item2] = botSymbol;
         }
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-
             UpdateLines();
             Console.WriteLine("TicTacToe");
             Console.WriteLine("Выберите режим игры: \n \t 0 - игра с игроком \n \t 1 - игра против компьютера");
-            int gameMode=0;
+            int gameMode = 0;
             do
             {
                 gameMode = int.Parse(Console.ReadLine());
@@ -195,12 +194,13 @@ namespace Task2.TicTacToe
             int playerId = 0;
             do
             {
-                switch(playerId)
+                switch (playerId)
                 {
                     case 0:
                         PlayerStep("Первый игрок (x)", XPlayerSymbol);
                         playerId = 1;
                         break;
+
                     case 1:
                         if (gameMode == 0)
                             PlayerStep("Второй игрок (o)", OPlayerSymbol);
@@ -213,7 +213,6 @@ namespace Task2.TicTacToe
                 //Обновление значений в линиях
                 lines.Clear();
                 UpdateLines();
-
             } while (СheckingTheLines());
         }
     }
