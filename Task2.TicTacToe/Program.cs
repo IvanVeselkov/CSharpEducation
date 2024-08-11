@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Task2.TicTacToe
 {
+    //
     internal class Program
     {
         private static char[,] field = new char[3, 3] { { ' ', ' ', ' ' }, { ' ', ' ', ' ' }, { ' ', ' ', ' ' } };
