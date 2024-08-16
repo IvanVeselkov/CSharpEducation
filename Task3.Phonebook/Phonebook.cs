@@ -20,29 +20,9 @@ using System.Threading.Tasks;
 /// </summary>
 namespace Task3.Phonebook
 {
-    internal class Abonent
-    {
-        private string userName;
-
-        public string UserName
-        { set { userName = value; } get => userName; }
-
-        private long userPhoneNumber;
-
-        public long UserPhoneNumber
-        { set { userPhoneNumber = value; } get => userPhoneNumber; }
-
-        public Abonent(string userNAME = "", long userNUMBER = 0)
-        {
-            UserName = userNAME;
-            UserPhoneNumber = userNUMBER;
-        }
-    }
-
     internal sealed class Phonebook
     {
-        private List<Abonent> contacts = new List<Abonent>();
-        public List<Abonent> Contacts { get => contacts; }
+        public List<Abonent> Contacts { get; }
         private static Phonebook? instance;
 
         public static Phonebook getInstance()
@@ -54,6 +34,7 @@ namespace Task3.Phonebook
 
         private Phonebook()
         {
+            Contacts = new List<Abonent>();
             ReadFromFile();
         }
 
@@ -62,8 +43,10 @@ namespace Task3.Phonebook
         /// </summary>
         private void ReadFromFile()
         {
-            contacts.Clear();
-            string path = @"D:\ProgrammingShit\Repository\CSharpEducation\Task3.Phonebook\phonebook.txt";
+            Contacts.Clear();
+            var exePath = AppDomain.CurrentDomain.BaseDirectory;
+            var path = Path.Combine(exePath, "phonebook.txt");
+
             if (File.Exists(path))
             {
                 using (StreamReader sr = File.OpenText(path))
@@ -71,7 +54,7 @@ namespace Task3.Phonebook
                     string s;
                     while ((s = sr.ReadLine()) != null)
                     {
-                        contacts.Add(MakeAbonentFromLine(s));
+                        Contacts.Add(MakeAbonentFromLine(s));
                     }
                     sr.Close();
                 }
@@ -85,13 +68,13 @@ namespace Task3.Phonebook
         /// <summary>
         /// Полная перезапись базы с номерами
         /// </summary>
-        public void OverwritingTheDatabase()
+        private void OverwritingTheDatabase()
         {
             string path = @"D:\ProgrammingShit\Repository\CSharpEducation\Task3.Phonebook\phonebook.txt";
             File.WriteAllText(path, String.Empty);
             using (StreamWriter sw = File.CreateText(path))
             {
-                foreach (var i in contacts)
+                foreach (var i in Contacts)
                 {
                     sw.WriteLine(MakeLineFromAbonent(i));
                 }
@@ -137,13 +120,13 @@ namespace Task3.Phonebook
         /// <summary>
         /// Добавление номера в телефонную книгу
         /// </summary>
-        public void AddAbonent(Abonent a)
+        public void AddAbonent(Abonent contact)
         {
-            if (!FindAbonentInfo(a))
+            if (!FindAbonentInfo(contact))
             {
-                contacts.Add(a);
+                Contacts.Add(contact);
                 Console.WriteLine("Абонент добавлен успешно.\n");
-                SavePhoneNumberIntoDataBase(a);
+                SavePhoneNumberIntoDataBase(contact);
             }
             else
             {
@@ -157,7 +140,7 @@ namespace Task3.Phonebook
         public Abonent GetAbonent(long number)
         {
             Abonent startAbonent = new Abonent("", number);
-            Abonent result = new Abonent();
+            Abonent result;
             if (FindAbonentInfo(startAbonent, out result))
             {
                 Console.WriteLine("Найден абонент: \n");
@@ -174,7 +157,7 @@ namespace Task3.Phonebook
         public Abonent GetAbonent(string name)
         {
             Abonent startAbonent = new Abonent(name, 0);
-            Abonent result = new Abonent();
+            Abonent result;
             if (FindAbonentInfo(startAbonent, out result))
             {
                 Console.WriteLine("Найден абонент: \n");
@@ -188,10 +171,10 @@ namespace Task3.Phonebook
         /// <summary>
         /// Удаление контакта из базы
         /// </summary>
-        /// <param name="a">Абонент</par>
-        public void RemoveAbonent(Abonent a)
+        /// <param name="contant">Абонент</par>
+        public void RemoveAbonent(Abonent contant)
         {
-            contacts.Remove(a);
+            Contacts.Remove(contant);
             OverwritingTheDatabase();
             Console.WriteLine("Абонент удален успешно.\n");
         }
@@ -205,45 +188,45 @@ namespace Task3.Phonebook
             Abonent r = GetAbonent(name);
             if (r != null)
             {
-                contacts.Remove(r);
-                OverwritingTheDatabase();
-                Console.WriteLine("Абонент удален успешно.\n");
+                RemoveAbonent(r);
             }
         }
 
         /// <summary>
-        /// Проверка наличия номера в телефонной книге, ели есть то сохраняет в b
+        /// Проверка наличия номера в телефонной книге, ели есть то сохраняет в resultContact
+        /// Проверка по имени нужна для базы
+        /// Условие что все имена должны быть уникальны
         /// </summary>
         /// <returns>
         /// True: Такой номер есть
         /// False: Такого номера нет
         /// </returns>
-        private bool FindAbonentInfo(Abonent a, out Abonent b)
+        private bool FindAbonentInfo(Abonent contact, out Abonent resultContact)
         {
             bool find = false;
-            b = null;
-            for (int i = 0; i < contacts.Count; i++)
+            resultContact = null;
+            for (int i = 0; i < Contacts.Count; i++)
             {
-                if (contacts[i].UserName == a.UserName)//
+                if (Contacts[i].UserPhoneNumber == contact.UserPhoneNumber)//
                 {
                     find = true;
-                    b = contacts[i];
+                    resultContact = Contacts[i];
                     break;
                 }
-                if (contacts[i].UserPhoneNumber == a.UserPhoneNumber)//
+                if (Contacts[i].UserName == contact.UserName)//
                 {
                     find = true;
-                    b = contacts[i];
+                    resultContact = Contacts[i];
                     break;
                 }
             }
             return find;
         }
 
-        private bool FindAbonentInfo(Abonent a)
+        private bool FindAbonentInfo(Abonent contact)
         {
-            Abonent b = new Abonent();
-            return FindAbonentInfo(a, out b);
+            Abonent plugContact;
+            return FindAbonentInfo(contact, out plugContact);
         }
     }
 }
