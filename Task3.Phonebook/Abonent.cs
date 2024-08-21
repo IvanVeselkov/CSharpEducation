@@ -1,23 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Task3.Phonebook
+﻿namespace Task3.Phonebook
 {
-    internal class Abonent
+  /// <summary>
+  /// Класс абонент содержащий информацию о абоненте из телефонной книги.
+  /// </summary>
+  internal class Abonent
+  {
+    #region Поля и Свойства
+    public string Name { set; get; }
+
+    public long PhoneNumber { set; get; }
+    #endregion
+
+    #region Конструкторы
+    public Abonent(string name, long phonenumber)
     {
-        public string UserName
-        { set; get; }
-
-        public long UserPhoneNumber
-        { set; get; }
-
-        public Abonent(string name, long phonenumber)
-        {
-            UserName = name;
-            UserPhoneNumber = phonenumber;
-        }
+      Name = name;
+      PhoneNumber = phonenumber;
     }
+    #endregion
+  }
 }
