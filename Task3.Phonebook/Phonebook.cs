@@ -208,7 +208,7 @@ namespace Task3.Phonebook
 
 
     /// <summary>
-    /// Сингтун стаф
+    /// Сингтун стаф.
     /// </summary>
     /// <returns>Выходная телефонная книжка</returns>
     public static Phonebook getInstance()
