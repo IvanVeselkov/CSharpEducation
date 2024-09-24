@@ -140,6 +140,11 @@ namespace Task4.StaffInformation
     static void Main(string[] args)
     {
       Staff staff = Staff.getInstance();
+      Employee Tim = new Employee("Tim Hook", 5, 10);
+      staff.AddEmployee("Tim Hook", 5, 10);
+      GetAllStaffMembers(staff);
+      staff.RevomeEmployee(new Employee("Tim Hook", 0, 0));
+      GetAllStaffMembers(staff);
       bool programmState = true;
       Console.WriteLine("---StaffInformation---");
       
@@ -172,7 +177,6 @@ namespace Task4.StaffInformation
             RemoveEmployeeFromStaff(staff);
             break;
           default:
-            programmState = false;
             break;
         }
       } while (programmState);
