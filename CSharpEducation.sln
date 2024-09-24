@@ -7,9 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Task1", "Task1\Task1.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Task2.TicTacToe", "Task2.TicTacToe\Task2.TicTacToe.csproj", "{F3A9D7DE-BD30-4BC2-B54C-E55633092A43}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Task3.Phonebook", "Task3.Phonebook\Task3.Phonebook.csproj", "{2B5EE656-752A-4798-97F2-17716C52F183}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Task4.StaffInformation", "Task4.StaffInformation\Task4.StaffInformation.csproj", "{4A044507-16F5-4224-A435-9ED5D23941B1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Task3.Phonebook", "Task3.Phonebook\Task3.Phonebook.csproj", "{2B5EE656-752A-4798-97F2-17716C52F183}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +27,6 @@ Global
 		{2B5EE656-752A-4798-97F2-17716C52F183}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B5EE656-752A-4798-97F2-17716C52F183}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B5EE656-752A-4798-97F2-17716C52F183}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4A044507-16F5-4224-A435-9ED5D23941B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4A044507-16F5-4224-A435-9ED5D23941B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4A044507-16F5-4224-A435-9ED5D23941B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4A044507-16F5-4224-A435-9ED5D23941B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
