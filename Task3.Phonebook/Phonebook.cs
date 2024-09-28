@@ -18,6 +18,7 @@ namespace Task3.Phonebook
     #endregion
 
     #region Методы
+
     /// <summary>
     /// Формирование базы контактов из файла.
     /// </summary>
